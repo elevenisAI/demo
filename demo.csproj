@@ -142,7 +142,10 @@
     <Compile Include="DHSDK\OriginalSDK.cs" />
     <Compile Include="File\CloneObject.cs" />
     <Compile Include="File\RIni.cs" />
+    <Compile Include="Helps\ConfigManager.cs" />
+    <Compile Include="Helps\ImageEnumerator.cs" />
     <Compile Include="Helps\Permission.cs" />
+    <Compile Include="Helps\ProductConfig.cs" />
     <Compile Include="Helps\RStartSet.cs" />
     <Compile Include="ImageTools\ImageConversion.cs" />
     <Compile Include="log\Log.cs" />
@@ -172,6 +175,12 @@
     <Compile Include="SubForm\CameraSet.Designer.cs">
       <DependentUpon>CameraSet.cs</DependentUpon>
     </Compile>
+    <Compile Include="SubForm\ImageMeasureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForm\ImageMeasureForm.Designer.cs">
+      <DependentUpon>ImageMeasureForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SubForm\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -191,6 +200,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForm\CameraSet.resx">
       <DependentUpon>CameraSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForm\ImageMeasureForm.resx">
+      <DependentUpon>ImageMeasureForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForm\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
