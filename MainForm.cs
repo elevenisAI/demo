@@ -25,6 +25,7 @@ using log;
 using log4net.Core;
 using NetSDKCS;
 using OpenCvSharp;
+using Rex.UI;
 using RexControl;
 using RexHelps;
 using Sunny.UI;
@@ -35,24 +36,28 @@ namespace demo
 {
     public partial class MainForm : Form
 
-    {
+    {/// <summary>
+     /// ini文件读取
+     /// </summary>
+        public static RIni ini = new RIni(Path.Combine(Application.StartupPath, "CameraConfig.ini"));
+        public static RIni iniSetting = new RIni(Path.Combine(Application.StartupPath, "SettingConfig.ini"));
         /// <summary>
         /// 相机设置二值化传值
         /// </summary>
-        public BinarizationMethod method;
-        public int maxValue;
-        public int blockSize;
-        public int constant;
-        public int threshold;
+        public static BinarizationMethod method;
+        public static int maxValue;
+        public static int blockSize;
+        public static int constant;
+        public static int threshold;
         /// <summary>
         /// 控制取流频率计数
         /// </summary>
         int id;
-        long camerFrameRate = 48;
+        public static long camerFrameRate = 48;
         /// <summary>
         /// 预览标志位
         /// </summary>
-        private bool isPreviewingOne = false; // 用于记录是否正在预览
+        private static bool isPreviewingOne = false; // 用于记录是否正在预览
         /// <summary>
         /// 图片转换算法工具对象
         /// </summary>
@@ -61,10 +66,6 @@ namespace demo
         /// 回调函数设置，几个相机几个回调函数
         /// </summary>
         private static fRealDataCallBackEx2 m_RealDataCallBackEx2;
-        /// <summary>
-        /// 相机管理类单例
-        /// </summary>
-        private CameraManager Instance;//相机管理类单例
         /// <summary>
         /// 程序是否正在运行标志位
         /// </summary>
@@ -85,20 +86,31 @@ namespace demo
         public bool isBinary = false;
 
         public MainForm()
-        {         
+        {
+            // 检测磁盘剩余容量，防止存图系统硬盘容量卡死
+            if (!CheckDiskSpace())
+            {
+                // 如果剩余容量小于 25%，关闭软件
+                MessageBox.Show("磁盘剩余容量不足 25%，软件将关闭。", "磁盘空间不足", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Application.Exit();
+                Environment.Exit(1);
+            }
+            // 初始化 PerformanceCounter 来监控私有字节
             this.WindowState = FormWindowState.Maximized;
             InitializeComponent();
-            // 初始化 PerformanceCounter 来监控私有字节
             privateBytesCounter = new PerformanceCounter("Process", "Private Bytes", Process.GetCurrentProcess().ProcessName);
             m_RealDataCallBackEx2 = new fRealDataCallBackEx2(RealDataCallBack);//设置回调
         }
-   
+
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             Log.LoadConfig("D:\\cSharp\\y\\demo\\log4net.config");
             Log.InitializeRichTextBox(this.RichTextBoxLog);
             ShowTime();
+            // 自动加载相机配置
+            LoadBinarizationParameters();
+            cNumericUpDown1.Value = double.Parse(iniSetting.ReadValue("Config", "FrameRate", "48"));
         }
         /// <summary>
         /// 开机自启动窗口
@@ -340,7 +352,7 @@ namespace demo
             {
                 System.Drawing.Point screenPoint = Cursor.Position;
                 CMScamera1.Show(screenPoint);
-                    
+
             }
         }
         /// <summary>
@@ -433,13 +445,13 @@ namespace demo
         }
         #endregion
         #region 上下文菜单相机设置窗口
-        private void CameraSetForm_OnBinarizationParametersChanged(BinarizationMethod method, int threshold, int maxValue, int blockSize, int constant) 
+        private void CameraSetForm_OnBinarizationParametersChanged(BinarizationMethod _method, int _threshold, int _maxValue, int _blockSize, int _constant)
         {
-            this.method = method;
-            this.threshold = threshold;
-            this.maxValue = maxValue;
-            this.blockSize = blockSize;
-            this.constant = constant;
+            method = _method;
+            threshold = _threshold;
+            maxValue = _maxValue;
+            blockSize = _blockSize;
+            constant = _constant;
         }
         /// <summary>
         /// 相机设置可以在此处更新添加订阅事件
@@ -448,7 +460,7 @@ namespace demo
         {
             if (cameraSetForm == null || cameraSetForm.IsDisposed)
             {
-               
+
                 cameraSetForm = new CameraSet();
                 // 订阅事件
                 cameraSetForm.OnBinarizationParametersChanged += CameraSetForm_OnBinarizationParametersChanged;
@@ -457,6 +469,11 @@ namespace demo
             }
             cameraSetForm.Show();
         }
+        /// <summary>
+        /// 相机设置ui窗口显示，带有权限验证
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void 相机设置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (userRole == Permission.Role.Admin)
@@ -703,14 +720,14 @@ namespace demo
         {
             if (id == 20000) { id = 0; }
             id++;//控制取流频率
-            if(id % camerFrameRate == 0)
+            if (id % camerFrameRate == 0)
             {
                 if (!isPreviewingOne) return; // 如果未在预览，直接返回
                 byte[] frameData = new byte[(int)dwBufSize];
                 Marshal.Copy(pBuffer, frameData, 0, (int)dwBufSize);
                 await ProcessFrameAsync(frameData);
             }
-            
+
         }
         #endregion
         private async Task ProcessFrameAsync(byte[] frameData)
@@ -724,7 +741,7 @@ namespace demo
                 // 将 Bitmap 转换为 Mat
                 Mat mat = imageConversion.BitmapToMat(tmp);
                 // 对 Mat 进行二值化处理
-                if (isBinary == true) 
+                if (isBinary == true)
                 {
                     Mat binaryMat = opencvAlgorithm.Binarize(mat, method, threshold, maxValue, blockSize, constant);
                     Bitmap processedBitmap = imageConversion.MatToBitmap(binaryMat);
@@ -741,17 +758,21 @@ namespace demo
                     UpdatePictureBox(this.pictureBox2, tmp);
                     mat.Dispose();
                 }
-                
+
             });
         }
-
-        private void UpdatePictureBox(PictureBox pictureBox , Bitmap bitmap)
+        /// <summary>
+        /// 更新显示的picturebox方法
+        /// </summary>
+        /// <param name="pictureBox"></param>
+        /// <param name="bitmap"></param>
+        private void UpdatePictureBox(PictureBox pictureBox, Bitmap bitmap)
         {
             if (pictureBox.InvokeRequired)
             {
                 pictureBox.Invoke(new Action(() =>
                 {
-                    UpdatePictureBox(pictureBox,bitmap);
+                    UpdatePictureBox(pictureBox, bitmap);
                 }));
             }
             else
@@ -848,7 +869,7 @@ namespace demo
         private async void 原图目录ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // 定义要打开的文件夹路径
-            string folderPath = "F:\\testImageSave\\"; 
+            string folderPath = "F:\\testImageSave\\";
 
             // 确保路径以反斜杠结尾
             if (!folderPath.EndsWith("\\"))
@@ -932,18 +953,25 @@ namespace demo
             {
                 try
                 {
-                    string ip = "192.168.1.101";
-                    ushort port = 37777;
-                    string name = "admin";
-                    string password = "yyyy2025";
+                    string[] sections = ini.ReadSections();
+                    foreach (string section in sections) {
+                        if (section.StartsWith("Cameras1"))
+                        {
+                            string ip = ini.ReadValue(section, "IP", "");
+                            string portText = ini.ReadValue(section, "Port", "");
+                            string name = ini.ReadValue(section, "Name", "");
+                            string password = ini.ReadValue(section, "Password", "");
+                            ushort port;
+                            ushort.TryParse(portText, out port);
+                            Camera camera = new Camera(ip, port, name, password, 1);
+                            bool loginSuccess = await Task.Run(() => camera.Login());
+                            if (loginSuccess)
+                            {
+                                CameraManager.Instance.AddCamera(camera);
+                                Log.WriteInfo("IP：" + ip + "登陆成功");
+                            }
 
-                    Camera camera = new Camera(ip, port, name, password, 1);
-                    bool loginSuccess = await Task.Run(() => camera.Login());
-
-                    if (loginSuccess)
-                    {
-                        CameraManager.Instance.AddCamera(camera);
-                        Log.WriteInfo("IP：" + ip + "登陆成功");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -956,16 +984,92 @@ namespace demo
             {
                 Log.WriteWarns("相机已登录");
             }
-            
+
         }
         /// <summary>
         /// 取流速度事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="value"></param>
-        private void cNumericUpDown1_ValueChanged(object sender, double value)
+        private async void cNumericUpDown1_ValueChanged(object sender, double value)
         {
-            this.camerFrameRate = 53-(int)value;
+            // 更新帧率
+            camerFrameRate = 53 - (int)value;
+
+            // 异步写入到 INI 文件
+            await WriteFrameRateToIniAsync(value);
         }
+
+        private async Task WriteFrameRateToIniAsync(double value)
+        {
+            await Task.Run(() =>
+            {
+                // 将帧率值写入到 INI 文件
+                iniSetting.WriteValue("Config", "FrameRate", value.ToString());
+            });
+        }
+        /// <summary>
+        /// 加载参数配置
+        /// </summary>
+        private void LoadBinarizationParameters()
+        {
+            try
+            {
+                // 读取二值化参数
+                string binarizeModeString = ini.ReadValue("Cameras1", "BinarizeMode");
+                method = (BinarizationMethod)Enum.Parse(typeof(BinarizationMethod), binarizeModeString);
+
+                string thresholdMinString = ini.ReadValue("Cameras1", "BinarizeMin", "128");
+                threshold = int.Parse(thresholdMinString);
+
+                string maxValueString = ini.ReadValue("Cameras1", "BinarizeMax", "255");
+                maxValue = int.Parse(maxValueString);
+
+                string blockSizeString = ini.ReadValue("Cameras1", "BlokSize", "3");
+                blockSize = int.Parse(blockSizeString);
+
+                string constantString = ini.ReadValue("Cameras1", "Const", "5");
+                constant = int.Parse(constantString);
+
+                Log.WriteInfo("二值化参数加载成功");
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrors("加载二值化参数失败：" + ex.Message);
+            }
+        }
+
+       # region 系统监控函数
+        private bool CheckDiskSpace()
+        {
+            try
+            {
+                // 指定要检测的磁盘分区
+                string driveLetter = "D:";
+                DriveInfo driveInfo = new DriveInfo(driveLetter);
+
+                // 获取磁盘的总容量和剩余可用容量
+                long totalSize = driveInfo.TotalSize; // 总容量（字节）
+                long availableFreeSpace = driveInfo.AvailableFreeSpace; // 剩余可用容量（字节）
+
+                // 计算剩余容量百分比
+                double availablePercentage = (double)availableFreeSpace / totalSize * 100;
+
+                // 输出结果
+                Log.WriteInfo($"磁盘 {driveLetter} 的总容量为：{totalSize / (1024.0 * 1024 * 1024):F2} GB");
+                Log.WriteInfo($"剩余可用容量为：{availableFreeSpace / (1024.0 * 1024 * 1024):F2} GB");
+                Log.WriteInfo($"剩余容量百分比：{availablePercentage:F2}%");
+
+                // 检查剩余容量是否小于 25%
+                return availablePercentage >= 25.0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"检测磁盘空间时发生错误：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false; // 发生异常时，认为条件不满足
+            }
+        }
+#endregion
+
     }
 }

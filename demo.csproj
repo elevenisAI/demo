@@ -142,7 +142,9 @@
     <Compile Include="DHSDK\OriginalSDK.cs" />
     <Compile Include="File\CloneObject.cs" />
     <Compile Include="File\RIni.cs" />
+    <Compile Include="Helps\ConfigManager.cs" />
     <Compile Include="Helps\Permission.cs" />
+    <Compile Include="Helps\ProductConfig.cs" />
     <Compile Include="Helps\RStartSet.cs" />
     <Compile Include="ImageTools\ImageConversion.cs" />
     <Compile Include="log\Log.cs" />

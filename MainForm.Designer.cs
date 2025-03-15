@@ -203,14 +203,14 @@
             // 相机设定ToolStripMenuItem
             // 
             this.相机设定ToolStripMenuItem.Name = "相机设定ToolStripMenuItem";
-            this.相机设定ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.相机设定ToolStripMenuItem.Size = new System.Drawing.Size(152, 26);
             this.相机设定ToolStripMenuItem.Text = "相机设定";
             this.相机设定ToolStripMenuItem.Click += new System.EventHandler(this.相机设定ToolStripMenuItem_Click);
             // 
             // iO设置ToolStripMenuItem
             // 
             this.iO设置ToolStripMenuItem.Name = "iO设置ToolStripMenuItem";
-            this.iO设置ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.iO设置ToolStripMenuItem.Size = new System.Drawing.Size(152, 26);
             this.iO设置ToolStripMenuItem.Text = "IO设置";
             // 
             // toolStripSeparator3
