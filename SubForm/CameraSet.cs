@@ -1,6 +1,5 @@
 ﻿using demo.Algorithm;
 using demo.Cameras;
-using demo.Helps;
 using log;
 using Rex.UI;
 using RexControl;
@@ -23,13 +22,6 @@ namespace demo.SubForm
 {
     public partial class CameraSet : Form
     {
-        BinarizationMethod method_1;
-        int thresholdMin_1;
-        int maxValue_1;
-        int blockSize_1;
-        int constant_1;
-        public static Dictionary<string,string> ProductConfig { get; set; }
-        public static ConfigManager configLoader = new ConfigManager(Path.Combine(Application.StartupPath, "CameraConfig.ini"));
         // 回调委托声明
         public delegate void BinarizationParametersHandler(BinarizationMethod method, int threshold, int maxValue, int blockSize, int constant);
         // 事件声明
@@ -56,19 +48,116 @@ namespace demo.SubForm
             }
         }
         /// <summary>
-        /// 加载时从ini配置文件传递到主界面调用配置参数
+        /// 登录按键登录相机
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CameraSet_Load(object sender, EventArgs e)
+        private async void BTlogin_Click(object sender, EventArgs e)
         {
-            LoadCameraini();
+            try
+            {
+                // 禁用按钮，防止重复点击
+                string ip = this.TBIP.Text;
+                string portText = this.TBPORT.Text;
+                ushort port;
+                ushort.TryParse(portText, out port);
+                string name = this.TBName.Text;
+                string password = this.TBpassword.Text;
+
+                Camera camera = new Camera(ip, port, name, password, id);
+                bool loginSuccess = await Task.Run(() => camera.Login());
+
+                if (loginSuccess && !(CBcamera.Items.Contains("相机" + ip)))
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        // 检查是否已存在相同相机
+                        bool exists = allSections.Any(section => section.Key.StartsWith("Camera") && ini.ReadValue(section.Key, "IP", "") == ip);
+                        if (!exists)
+                        {
+                            id++;
+                            CBcamera.Items.Add("相机" + ip);
+                            CBcamera.SelectedIndex = CBcamera.Items.Count - 1;
+                        }
+                        CameraManager.Instance.AddCamera(camera);
+                    }));
+
+                    // 异步写入INI文件
+                    await Task.Run(() => WriteIniFile(ip, port, name, password));
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.WriteErrors(ex);
+                Log.WriteErrors("检查输入配置是否有误");
+            }
+            finally
+            {
+                // 启用按钮
+                BTlogin.Enabled = true;
+            }
         }
         /// <summary>
-        /// 执行按钮
+        /// 相机信息写入到配置文件
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="ip"></param>
+        /// <param name="port"></param>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <param name="id"></param>
+        private void WriteIniFile(string ip, ushort port, string name, string password)
+        {
+            ini.WriteValue("Cameras" + id, "IP", ip);
+            ini.WriteValue("Cameras" + id, "Port", port.ToString());
+            ini.WriteValue("Cameras" + id, "Name", name);
+            ini.WriteValue("Cameras" + id, "Password", password);
+
+        }
+        private void LoadCameraFromIni()
+        {
+            CBcamera.Items.Clear(); // 清空相机列表
+            // 读取所有节
+            string[] sections = ini.ReadSections();
+            foreach (string section in sections)
+            {
+                if (section.StartsWith("Camera"))
+                {
+                    string ip = ini.ReadValue(section, "IP", "");
+                    string portText = ini.ReadValue(section, "Port", "");
+                    string name = ini.ReadValue(section, "Name", "");
+                    string password = ini.ReadValue(section, "Password", "");
+
+                    ushort port;
+                    if (ushort.TryParse(portText, out port))
+                    {
+                        // 添加到相机列表
+                        this.BeginInvoke((MethodInvoker)delegate
+                        {
+                            CBcamera.Items.Add($"相机{section.Substring(7)} - {ip}:{port}");
+                            this.CBcamera.SelectedIndex = this.CBcamera.Items.Count - 1;
+                            TBIP.Text = ip;
+                            TBPORT.Text = portText;
+                            TBName.Text = name;
+                            TBpassword.Text = password;
+
+                        });
+                    }
+                    else
+                    {
+                        // 处理端口解析失败的情况
+                        MessageBox.Show($"端口解析失败: {portText}");
+                    }
+                }
+            }
+        }
+
+        private void CameraSet_Load(object sender, EventArgs e)
+        {
+            LoadCameraFromIni();
+            CB_BinarizeMode.DataSource = Enum.GetNames(typeof(opencvAlgorithm.BinarizationMethod));//数据绑定
+
+        }
+
         private void BT_Save_Click(object sender, EventArgs e)
         { // 获取参数
             BinarizationMethod method = (BinarizationMethod)CB_BinarizeMode.SelectedIndex;
@@ -78,56 +167,6 @@ namespace demo.SubForm
             int constant = (int)ucNumTextBox3.Num;
             // 触发事件
             OnBinarizationParametersChanged?.Invoke(method, threshold, maxValue, blockSize, constant);
-        }
-
-        private void BT_finallSave_Click(object sender, EventArgs e)
-        {
-            switch (CBcamera.Text)
-            {
-                case "Cameras1":
-                    ini.WriteValue("Cameras1", "BinarizeMode", this.CB_BinarizeMode.Text.ToString());
-                    ini.WriteValue("Cameras1", "BinarizeMin", this.NB_Binarize.Num.ToString());
-                    ini.WriteValue("Cameras1", "BinarizeMax", this.NB_BinarizeM.Num.ToString());
-                    ini.WriteValue("Cameras1", "BlokSize", this.ucNumTextBox2.Num.ToString());
-                    ini.WriteValue("Cameras1", "Const", this.ucNumTextBox3.Num.ToString());                  
-                    break;
-            }
-        }
-        /// <summary>
-        /// combox相机选择变化
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CBcamera_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (CBcamera.Text == "Cameras1")
-            {
-                this.CB_BinarizeMode.Text = method_1.ToString();
-                this.NB_Binarize.Num = thresholdMin_1;
-                this.NB_BinarizeM.Num = maxValue_1;
-                this.ucNumTextBox2.Num = blockSize_1;
-                this.ucNumTextBox3.Num = constant_1;
-            }
-        }
-        /// <summary>
-        /// 从ini文件加载相机配置
-        /// </summary>
-        public void LoadCameraini()
-        {
-            CB_BinarizeMode.DataSource = Enum.GetNames(typeof(opencvAlgorithm.BinarizationMethod));//数据绑定
-            ProductConfig = ini.ReadSection("Cameras1");
-            string binarizeModeString_1 = ProductConfig["BinarizeMode"].ToString();
-            //Console.WriteLine($"BinarizeMode: {binarizeModeString}"); // 调试：检查是否乱码
-            method_1 = (BinarizationMethod)Enum.Parse(typeof(BinarizationMethod), binarizeModeString_1);
-            string threshold_1 = ProductConfig["BinarizeMin"].ToString();
-            thresholdMin_1 = int.Parse(threshold_1);
-            string maxValueString_1 = ProductConfig["BinarizeMax"].ToString();
-            maxValue_1 = int.Parse(maxValueString_1);
-            string blockSizeString_1 = ProductConfig["BlokSize"].ToString();
-            blockSize_1 = int.Parse(blockSizeString_1);
-            string constantString_1 = ProductConfig["Const"].ToString();
-            constant_1 = int.Parse(constantString_1);
-            OnBinarizationParametersChanged?.Invoke(method_1, maxValue_1, maxValue_1, blockSize_1, constant_1);
         }
     }
   

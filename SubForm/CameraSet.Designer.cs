@@ -29,10 +29,20 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CameraSet));
+            this.uiGroupBox1 = new Sunny.UI.UIGroupBox();
+            this.uiPanel1 = new Sunny.UI.UIPanel();
+            this.BTlogin = new Sunny.UI.UIHeaderButton();
+            this.TBpassword = new Sunny.UI.UITextBox();
+            this.TBName = new Sunny.UI.UITextBox();
+            this.uiLabel7 = new Sunny.UI.UILabel();
+            this.uiLabel6 = new Sunny.UI.UILabel();
+            this.TBPORT = new Sunny.UI.UITextBox();
+            this.TBIP = new Sunny.UI.UIIPTextBox();
+            this.uiLabel5 = new Sunny.UI.UILabel();
+            this.uiLabel4 = new Sunny.UI.UILabel();
             this.uiGroupBox2 = new Sunny.UI.UIGroupBox();
             this.uiGroupBox3 = new Sunny.UI.UIGroupBox();
             this.uiGroupBox4 = new Sunny.UI.UIGroupBox();
-            this.uiLabel1 = new Sunny.UI.UILabel();
             this.NB_BinarizeM = new RexControl.UCNumTextBox();
             this.BT_Save = new Sunny.UI.UIButton();
             this.ucNumTextBox3 = new RexControl.UCNumTextBox();
@@ -42,36 +52,191 @@
             this.NB_Binarize = new RexControl.UCNumTextBox();
             this.CB_BinarizeMode = new Sunny.UI.UIComboBox();
             this.uiButton3 = new Sunny.UI.UIButton();
-            this.BT_finallSave = new Sunny.UI.UIButton();
+            this.uiButton2 = new Sunny.UI.UIButton();
             this.uiLabel3 = new Sunny.UI.UILabel();
             this.ucNumTextBox1 = new RexControl.UCNumTextBox();
             this.BTModelSelect = new Sunny.UI.UIButton();
             this.uiLabel2 = new Sunny.UI.UILabel();
             this.uiCheckBoxGroup1 = new Sunny.UI.UICheckBoxGroup();
             this.CBcamera = new System.Windows.Forms.ComboBox();
+            this.LBcamera = new Sunny.UI.UILabel();
             this.uiContextMenuStrip1 = new Sunny.UI.UIContextMenuStrip();
+            this.uiLabel1 = new Sunny.UI.UILabel();
+            this.uiGroupBox1.SuspendLayout();
+            this.uiPanel1.SuspendLayout();
             this.uiGroupBox2.SuspendLayout();
             this.uiGroupBox3.SuspendLayout();
             this.uiGroupBox4.SuspendLayout();
             this.uiCheckBoxGroup1.SuspendLayout();
             this.SuspendLayout();
             // 
+            // uiGroupBox1
+            // 
+            this.uiGroupBox1.Controls.Add(this.uiPanel1);
+            this.uiGroupBox1.Font = new System.Drawing.Font("宋体", 12F);
+            this.uiGroupBox1.Location = new System.Drawing.Point(2, 91);
+            this.uiGroupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiGroupBox1.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiGroupBox1.Name = "uiGroupBox1";
+            this.uiGroupBox1.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
+            this.uiGroupBox1.Size = new System.Drawing.Size(1336, 178);
+            this.uiGroupBox1.TabIndex = 0;
+            this.uiGroupBox1.Text = "相机IP设置";
+            this.uiGroupBox1.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // uiPanel1
+            // 
+            this.uiPanel1.Controls.Add(this.BTlogin);
+            this.uiPanel1.Controls.Add(this.TBpassword);
+            this.uiPanel1.Controls.Add(this.TBName);
+            this.uiPanel1.Controls.Add(this.uiLabel7);
+            this.uiPanel1.Controls.Add(this.uiLabel6);
+            this.uiPanel1.Controls.Add(this.TBPORT);
+            this.uiPanel1.Controls.Add(this.TBIP);
+            this.uiPanel1.Controls.Add(this.uiLabel5);
+            this.uiPanel1.Controls.Add(this.uiLabel4);
+            this.uiPanel1.Font = new System.Drawing.Font("宋体", 12F);
+            this.uiPanel1.Location = new System.Drawing.Point(4, 37);
+            this.uiPanel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.uiPanel1.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiPanel1.Name = "uiPanel1";
+            this.uiPanel1.Size = new System.Drawing.Size(1170, 140);
+            this.uiPanel1.TabIndex = 2;
+            this.uiPanel1.Text = null;
+            this.uiPanel1.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // BTlogin
+            // 
+            this.BTlogin.Font = new System.Drawing.Font("宋体", 12F);
+            this.BTlogin.Image = ((System.Drawing.Image)(resources.GetObject("BTlogin.Image")));
+            this.BTlogin.Location = new System.Drawing.Point(607, 63);
+            this.BTlogin.MinimumSize = new System.Drawing.Size(1, 1);
+            this.BTlogin.Name = "BTlogin";
+            this.BTlogin.Padding = new System.Windows.Forms.Padding(0, 8, 0, 3);
+            this.BTlogin.Radius = 0;
+            this.BTlogin.RadiusSides = Sunny.UI.UICornerRadiusSides.None;
+            this.BTlogin.RectSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.None;
+            this.BTlogin.Size = new System.Drawing.Size(81, 29);
+            this.BTlogin.TabIndex = 8;
+            this.BTlogin.Text = "登录";
+            this.BTlogin.TipsFont = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.BTlogin.Click += new System.EventHandler(this.BTlogin_Click);
+            // 
+            // TBpassword
+            // 
+            this.TBpassword.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.TBpassword.Font = new System.Drawing.Font("宋体", 12F);
+            this.TBpassword.Location = new System.Drawing.Point(443, 63);
+            this.TBpassword.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TBpassword.MinimumSize = new System.Drawing.Size(1, 16);
+            this.TBpassword.Name = "TBpassword";
+            this.TBpassword.Padding = new System.Windows.Forms.Padding(5);
+            this.TBpassword.ShowText = false;
+            this.TBpassword.Size = new System.Drawing.Size(141, 29);
+            this.TBpassword.TabIndex = 7;
+            this.TBpassword.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.TBpassword.Watermark = "";
+            // 
+            // TBName
+            // 
+            this.TBName.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.TBName.Font = new System.Drawing.Font("宋体", 12F);
+            this.TBName.Location = new System.Drawing.Point(136, 63);
+            this.TBName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TBName.MinimumSize = new System.Drawing.Size(1, 16);
+            this.TBName.Name = "TBName";
+            this.TBName.Padding = new System.Windows.Forms.Padding(5);
+            this.TBName.ShowText = false;
+            this.TBName.Size = new System.Drawing.Size(150, 29);
+            this.TBName.TabIndex = 6;
+            this.TBName.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.TBName.Watermark = "";
+            // 
+            // uiLabel7
+            // 
+            this.uiLabel7.Font = new System.Drawing.Font("宋体", 12F);
+            this.uiLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel7.Location = new System.Drawing.Point(330, 69);
+            this.uiLabel7.Name = "uiLabel7";
+            this.uiLabel7.Size = new System.Drawing.Size(150, 23);
+            this.uiLabel7.TabIndex = 5;
+            this.uiLabel7.Text = "Pwd(密码)：";
+            // 
+            // uiLabel6
+            // 
+            this.uiLabel6.Font = new System.Drawing.Font("宋体", 12F);
+            this.uiLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel6.Location = new System.Drawing.Point(3, 69);
+            this.uiLabel6.Name = "uiLabel6";
+            this.uiLabel6.Size = new System.Drawing.Size(150, 23);
+            this.uiLabel6.TabIndex = 4;
+            this.uiLabel6.Text = "Name(用户名)：";
+            // 
+            // TBPORT
+            // 
+            this.TBPORT.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.TBPORT.Font = new System.Drawing.Font("宋体", 12F);
+            this.TBPORT.Location = new System.Drawing.Point(443, 16);
+            this.TBPORT.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TBPORT.MinimumSize = new System.Drawing.Size(1, 16);
+            this.TBPORT.Name = "TBPORT";
+            this.TBPORT.Padding = new System.Windows.Forms.Padding(5);
+            this.TBPORT.ShowText = false;
+            this.TBPORT.Size = new System.Drawing.Size(141, 29);
+            this.TBPORT.TabIndex = 3;
+            this.TBPORT.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
+            this.TBPORT.Watermark = "";
+            // 
+            // TBIP
+            // 
+            this.TBIP.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
+            this.TBIP.Font = new System.Drawing.Font("宋体", 12F);
+            this.TBIP.Location = new System.Drawing.Point(136, 16);
+            this.TBIP.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TBIP.MinimumSize = new System.Drawing.Size(1, 1);
+            this.TBIP.Name = "TBIP";
+            this.TBIP.Padding = new System.Windows.Forms.Padding(1);
+            this.TBIP.ShowText = false;
+            this.TBIP.Size = new System.Drawing.Size(150, 29);
+            this.TBIP.TabIndex = 1;
+            this.TBIP.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // uiLabel5
+            // 
+            this.uiLabel5.Font = new System.Drawing.Font("宋体", 12F);
+            this.uiLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel5.Location = new System.Drawing.Point(330, 22);
+            this.uiLabel5.Name = "uiLabel5";
+            this.uiLabel5.Size = new System.Drawing.Size(140, 23);
+            this.uiLabel5.TabIndex = 2;
+            this.uiLabel5.Text = "Port(端口)：";
+            // 
+            // uiLabel4
+            // 
+            this.uiLabel4.Font = new System.Drawing.Font("宋体", 12F);
+            this.uiLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel4.Location = new System.Drawing.Point(3, 22);
+            this.uiLabel4.Name = "uiLabel4";
+            this.uiLabel4.Size = new System.Drawing.Size(150, 23);
+            this.uiLabel4.TabIndex = 0;
+            this.uiLabel4.Text = "IP(设备地址)：";
+            // 
             // uiGroupBox2
             // 
             this.uiGroupBox2.Controls.Add(this.uiGroupBox3);
             this.uiGroupBox2.Controls.Add(this.uiButton3);
-            this.uiGroupBox2.Controls.Add(this.BT_finallSave);
+            this.uiGroupBox2.Controls.Add(this.uiButton2);
             this.uiGroupBox2.Controls.Add(this.uiLabel3);
             this.uiGroupBox2.Controls.Add(this.ucNumTextBox1);
             this.uiGroupBox2.Controls.Add(this.BTModelSelect);
             this.uiGroupBox2.Controls.Add(this.uiLabel2);
             this.uiGroupBox2.Font = new System.Drawing.Font("宋体", 12F);
-            this.uiGroupBox2.Location = new System.Drawing.Point(2, 118);
+            this.uiGroupBox2.Location = new System.Drawing.Point(2, 266);
             this.uiGroupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiGroupBox2.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiGroupBox2.Name = "uiGroupBox2";
             this.uiGroupBox2.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
-            this.uiGroupBox2.Size = new System.Drawing.Size(1174, 707);
+            this.uiGroupBox2.Size = new System.Drawing.Size(1174, 559);
             this.uiGroupBox2.TabIndex = 1;
             this.uiGroupBox2.Text = "相机算法设置";
             this.uiGroupBox2.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -85,7 +250,7 @@
             this.uiGroupBox3.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiGroupBox3.Name = "uiGroupBox3";
             this.uiGroupBox3.Padding = new System.Windows.Forms.Padding(0, 32, 0, 0);
-            this.uiGroupBox3.Size = new System.Drawing.Size(984, 372);
+            this.uiGroupBox3.Size = new System.Drawing.Size(947, 247);
             this.uiGroupBox3.TabIndex = 6;
             this.uiGroupBox3.Text = null;
             this.uiGroupBox3.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
@@ -111,17 +276,6 @@
             this.uiGroupBox4.TabIndex = 5;
             this.uiGroupBox4.Text = "传统算法";
             this.uiGroupBox4.TextAlignment = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // uiLabel1
-            // 
-            this.uiLabel1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel1.Location = new System.Drawing.Point(4, 37);
-            this.uiLabel1.Name = "uiLabel1";
-            this.uiLabel1.Size = new System.Drawing.Size(98, 29);
-            this.uiLabel1.TabIndex = 10;
-            this.uiLabel1.Text = "二值化";
-            this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // NB_BinarizeM
             // 
@@ -163,7 +317,7 @@
             this.BT_Save.Name = "BT_Save";
             this.BT_Save.Size = new System.Drawing.Size(100, 35);
             this.BT_Save.TabIndex = 7;
-            this.BT_Save.Text = "确认";
+            this.BT_Save.Text = "保存";
             this.BT_Save.TipsFont = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.BT_Save.Click += new System.EventHandler(this.BT_Save_Click);
             // 
@@ -306,7 +460,7 @@
             // 
             this.uiButton3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.uiButton3.Font = new System.Drawing.Font("宋体", 12F);
-            this.uiButton3.Location = new System.Drawing.Point(389, 470);
+            this.uiButton3.Location = new System.Drawing.Point(399, 377);
             this.uiButton3.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton3.Name = "uiButton3";
             this.uiButton3.Size = new System.Drawing.Size(100, 35);
@@ -314,18 +468,17 @@
             this.uiButton3.Text = "取消";
             this.uiButton3.TipsFont = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             // 
-            // BT_finallSave
+            // uiButton2
             // 
-            this.BT_finallSave.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.BT_finallSave.Font = new System.Drawing.Font("宋体", 12F);
-            this.BT_finallSave.Location = new System.Drawing.Point(92, 470);
-            this.BT_finallSave.MinimumSize = new System.Drawing.Size(1, 1);
-            this.BT_finallSave.Name = "BT_finallSave";
-            this.BT_finallSave.Size = new System.Drawing.Size(100, 35);
-            this.BT_finallSave.TabIndex = 4;
-            this.BT_finallSave.Text = "保存";
-            this.BT_finallSave.TipsFont = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.BT_finallSave.Click += new System.EventHandler(this.BT_finallSave_Click);
+            this.uiButton2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.uiButton2.Font = new System.Drawing.Font("宋体", 12F);
+            this.uiButton2.Location = new System.Drawing.Point(102, 377);
+            this.uiButton2.MinimumSize = new System.Drawing.Size(1, 1);
+            this.uiButton2.Name = "uiButton2";
+            this.uiButton2.Size = new System.Drawing.Size(100, 35);
+            this.uiButton2.TabIndex = 4;
+            this.uiButton2.Text = "保存";
+            this.uiButton2.TipsFont = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             // 
             // uiLabel3
             // 
@@ -405,6 +558,7 @@
             // uiCheckBoxGroup1
             // 
             this.uiCheckBoxGroup1.Controls.Add(this.CBcamera);
+            this.uiCheckBoxGroup1.Controls.Add(this.LBcamera);
             this.uiCheckBoxGroup1.Font = new System.Drawing.Font("宋体", 12F);
             this.uiCheckBoxGroup1.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(236)))), ((int)(((byte)(255)))));
             this.uiCheckBoxGroup1.Location = new System.Drawing.Point(2, -3);
@@ -421,13 +575,20 @@
             // CBcamera
             // 
             this.CBcamera.FormattingEnabled = true;
-            this.CBcamera.Items.AddRange(new object[] {
-            "Cameras1"});
             this.CBcamera.Location = new System.Drawing.Point(19, 35);
             this.CBcamera.Name = "CBcamera";
-            this.CBcamera.Size = new System.Drawing.Size(208, 28);
+            this.CBcamera.Size = new System.Drawing.Size(290, 28);
             this.CBcamera.TabIndex = 2;
-            this.CBcamera.SelectedIndexChanged += new System.EventHandler(this.CBcamera_SelectedIndexChanged);
+            // 
+            // LBcamera
+            // 
+            this.LBcamera.Font = new System.Drawing.Font("宋体", 12F);
+            this.LBcamera.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.LBcamera.Location = new System.Drawing.Point(334, 40);
+            this.LBcamera.Name = "LBcamera";
+            this.LBcamera.Size = new System.Drawing.Size(140, 23);
+            this.LBcamera.TabIndex = 1;
+            this.LBcamera.Visible = false;
             // 
             // uiContextMenuStrip1
             // 
@@ -437,12 +598,24 @@
             this.uiContextMenuStrip1.Name = "uiContextMenuStrip1";
             this.uiContextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
+            // uiLabel1
+            // 
+            this.uiLabel1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.uiLabel1.Location = new System.Drawing.Point(4, 37);
+            this.uiLabel1.Name = "uiLabel1";
+            this.uiLabel1.Size = new System.Drawing.Size(98, 29);
+            this.uiLabel1.TabIndex = 10;
+            this.uiLabel1.Text = "二值化";
+            this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // CameraSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1174, 794);
             this.Controls.Add(this.uiGroupBox2);
+            this.Controls.Add(this.uiGroupBox1);
             this.Controls.Add(this.uiCheckBoxGroup1);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -451,6 +624,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "相机设置";
             this.Load += new System.EventHandler(this.CameraSet_Load);
+            this.uiGroupBox1.ResumeLayout(false);
+            this.uiPanel1.ResumeLayout(false);
             this.uiGroupBox2.ResumeLayout(false);
             this.uiGroupBox3.ResumeLayout(false);
             this.uiGroupBox4.ResumeLayout(false);
@@ -460,15 +635,28 @@
         }
 
         #endregion
+
+        private Sunny.UI.UIGroupBox uiGroupBox1;
         private Sunny.UI.UIGroupBox uiGroupBox2;
         private Sunny.UI.UICheckBoxGroup uiCheckBoxGroup1;
+        private Sunny.UI.UILabel LBcamera;
         private Sunny.UI.UIButton BTModelSelect;
         private Sunny.UI.UILabel uiLabel2;
         private Sunny.UI.UILabel uiLabel3;
         private RexControl.UCNumTextBox ucNumTextBox1;
         private Sunny.UI.UIButton uiButton3;
-        private Sunny.UI.UIButton BT_finallSave;
+        private Sunny.UI.UIButton uiButton2;
+        private Sunny.UI.UILabel uiLabel4;
         private Sunny.UI.UIContextMenuStrip uiContextMenuStrip1;
+        private Sunny.UI.UIPanel uiPanel1;
+        private Sunny.UI.UITextBox TBpassword;
+        private Sunny.UI.UITextBox TBName;
+        private Sunny.UI.UILabel uiLabel7;
+        private Sunny.UI.UILabel uiLabel6;
+        private Sunny.UI.UITextBox TBPORT;
+        private Sunny.UI.UIIPTextBox TBIP;
+        private Sunny.UI.UILabel uiLabel5;
+        private Sunny.UI.UIHeaderButton BTlogin;
         private System.Windows.Forms.ComboBox CBcamera;
         private Sunny.UI.UIGroupBox uiGroupBox3;
         private Sunny.UI.UIComboBox CB_BinarizeMode;

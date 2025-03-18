@@ -25,58 +25,12 @@ namespace RexHelps
 
         #region "读取"
 
-     
         public string ReadValue(string section, string key, string defaultValue = "")
         {
-            // 读取文件的所有行
-            string[] lines = File.ReadAllLines(FilePath, System.Text.Encoding.UTF8);
-
-            // 用于标记是否进入目标节
-            bool inTargetSection = false;
-
-            foreach (string line in lines)
-            {
-                string trimmedLine = line.Trim();
-
-                // 检查是否是节的开始
-                if (trimmedLine.StartsWith("[") && trimmedLine.EndsWith("]"))
-                {
-                    // 提取节名
-                    string currentSection = trimmedLine.Trim('[', ']');
-
-                    // 如果是目标节，标记为 true
-                    if (currentSection == section)
-                    {
-                        inTargetSection = true;
-                    }
-                    else
-                    {
-                        // 如果不是目标节，标记为 false
-                        inTargetSection = false;
-                    }
-                }
-                else if (inTargetSection && trimmedLine.Contains("="))
-                {
-                    // 如果在目标节中，解析键值对
-                    string[] parts = trimmedLine.Split(new[] { '=' }, 2);
-                    if (parts.Length == 2)
-                    {
-                        string currentKey = parts[0].Trim();
-                        string currentValue = parts[1].Trim();
-
-                        // 如果找到目标键，返回其值
-                        if (currentKey == key)
-                        {
-                            return currentValue;
-                        }
-                    }
-                }
-            }
-
-            // 如果未找到目标键，返回默认值
-            return defaultValue;
+            StringBuilder temp = new StringBuilder(1024);
+            GetPrivateProfileString(section, key, defaultValue, temp, 1024, FilePath);
+            return temp.ToString();
         }
-
         // 读取所有节
         public string[] ReadSections()
         {
@@ -109,7 +63,7 @@ namespace RexHelps
             }
 
             bool inSection = false;
-            string[] lines = File.ReadAllLines(FilePath, Encoding.UTF8);
+            string[] lines = File.ReadAllLines(FilePath);
             foreach (string line in lines)
             {
                 if (line.StartsWith("[") && line.EndsWith("]"))
@@ -168,57 +122,7 @@ namespace RexHelps
         #region "写入"
         public void WriteValue(string section, string key, string value)
         {
-            // 读取整个文件内容
-            string[] lines = File.ReadAllLines(FilePath, Encoding.UTF8);
-            List<string> newLines = new List<string>();
-
-            bool sectionFound = false;
-            bool keyFound = false;
-
-            foreach (string line in lines)
-            {
-                string trimmedLine = line.Trim();
-
-                // 检查是否是目标节
-                if (trimmedLine.StartsWith("[") && trimmedLine.EndsWith("]"))
-                {
-                    if (trimmedLine.Trim('[', ']') == section)
-                    {
-                        sectionFound = true;
-                    }
-                    else
-                    {
-                        sectionFound = false;
-                    }
-                }
-
-                // 如果在目标节中，检查是否是目标键
-                if (sectionFound && trimmedLine.Contains("="))
-                {
-                    string[] parts = trimmedLine.Split(new[] { '=' }, 2);
-                    if (parts[0].Trim() == key)
-                    {
-                        newLines.Add($"{key}={value}");
-                        keyFound = true;
-                        continue;
-                    }
-                }
-
-                newLines.Add(line);
-            }
-
-            // 如果目标键未找到，添加到目标节中
-            if (!keyFound)
-            {
-                if (!sectionFound)
-                {
-                    newLines.Add($"[{section}]");
-                }
-                newLines.Add($"{key}={value}");
-            }
-
-            // 写入文件
-            File.WriteAllLines(FilePath, newLines, Encoding.UTF8);
+            WritePrivateProfileString(section, key, value, FilePath);
         }
         #endregion
 

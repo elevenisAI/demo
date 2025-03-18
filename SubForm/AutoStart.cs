@@ -19,13 +19,9 @@ namespace demo.SubForm
     public partial class AutoStart : Form
     {
         public static RIni mRini = new RIni(Application.StartupPath + "\\Config.ini");
-        private Form parentForm; // 父窗口的引用
-        public AutoStart(Form parent)
+        public AutoStart()
         {
             InitializeComponent();
-            this.parentForm = parent;
-            // 设置子窗口启动位置为屏幕中心
-            this.StartPosition = FormStartPosition.CenterScreen;
         }
       
         private void AutoStart_Load(object sender, EventArgs e)
@@ -48,6 +44,5 @@ namespace demo.SubForm
         {
             Close();
         }
-    
     }
 }
